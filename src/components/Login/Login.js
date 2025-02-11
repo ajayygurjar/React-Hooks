@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
@@ -39,14 +39,32 @@ const Login = (props) => {
     isValid: null,
   });
 
+
+  //Destructuring from object the values of isValid form state object;
+
+  const {isValid:emailIsValid}=emailState;
+  const {isValid:passwordIsValid}=passwordState;
+
+
+  useEffect(()=>{
+    const timer=setTimeout(()=>{
+     // console.log('Running')
+      setFormIsValid(passwordIsValid&& emailIsValid)
+      // also could have have used passwordState.isvalid and emailState.isValid;
+    },500)
+
+    return ()=>{
+      //console.log('CleanUp')
+      clearTimeout(timer)
+    }
+  },[emailIsValid,passwordIsValid])
+
   // Email input change handler
   const emailChangeHandler = (event) => {
     dispatchEmail({ type: "USER_INPUT", payload: event.target.value });
 
     // Validate form after email change
-    setFormIsValid(
-      event.target.value.includes("@") && passwordState.isValid
-    );
+    //setFormIsValid(event.target.value.includes("@") && passwordState.isValid);
   };
 
   // Password input change handler
@@ -54,7 +72,7 @@ const Login = (props) => {
     dispatchPassword({ type: "USER_PASS", payload: event.target.value });
 
     // Validate form after password change
-    setFormIsValid(emailState.isValid && event.target.value.trim().length > 6);
+    //setFormIsValid(emailState.isValid && event.target.value.trim().length > 6);
   };
 
   // Email input blur handler
