@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect,useContext } from "react";
+import React, { useState, useReducer, useEffect,useContext,useRef } from "react";
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
@@ -45,6 +45,16 @@ const Login = () => {
     value: "",
     isValid: null,
   });
+
+  // useRef for focusing on email during first render
+
+  const emailRef=useRef(null);
+  
+
+  useEffect(()=>{
+    emailRef.current.focus();
+  },[])
+
 
 
   
@@ -112,6 +122,7 @@ const Login = () => {
         >
           <label htmlFor="email">E-Mail</label>
           <input
+            ref={emailRef}
             type="email"
             id="email"
             value={emailState.value}
